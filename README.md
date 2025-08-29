@@ -11,7 +11,8 @@ Dette projektet skal ha følgene
 
 
 
-For nedlastning av dette projektet kan du bruke git clone og URl-en til dette repo slik = git clone https://github.com/SondreHaugom/Labs-Responses. 
+For nedlastning av dette projektet kan du bruke git clone og URl-en til dette repo slik = git clone https://github.com/SondreHaugom/Labs-Responses.
+ 
 
 
 

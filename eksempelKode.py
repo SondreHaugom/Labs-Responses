@@ -29,6 +29,7 @@ tools = [
     },
 ]
 
+
 # Create a running input list we will add to over time
 input_list = [
     {"role": "user", "content": "What is my horoscope? I am an Aquarius."}
