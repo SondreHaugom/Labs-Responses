@@ -14,8 +14,7 @@ conversationHistory = [
 # oppretter OpenAI-klienten
 client = OpenAI(api_key=OPENAI_API_KEY)
 # definerer en funksjon som henter dagens dato med datetime biblioteket
-def get_date():
-   return {"date": str(datetime.date.today())}
+
 # definerer verktøyene som kan brukes
 tools = [
    {
@@ -26,8 +25,8 @@ tools = [
        }
    }
 ]
-
-
+def get_date():
+   return {"date": str(datetime.date.today() - datetime.timedelta(days=2))}
 
 # definerer funksjonen for å chatte med GPT
 def chat_with_gpt(prompt):
@@ -41,7 +40,7 @@ def chat_with_gpt(prompt):
         messages=conversationHistory, 
         tools=tools
     )
-
+    print (response)
     # henter meldingen fra svaret
     message = response.choices[0].message
 
@@ -59,6 +58,7 @@ def chat_with_gpt(prompt):
           {"role": "tool", "tool_call_id": tool_call.id, "content": str(result)},
        ]
     )
+    print (second_response)
     # henter svaret fra verktøyet 
     final_answer = second_response.choices[0].message.content.strip()
     conversationHistory.append({"role": "assistant", "content": final_answer})
