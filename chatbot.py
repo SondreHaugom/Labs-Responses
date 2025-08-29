@@ -28,6 +28,7 @@ tools = [
 ]
 
 
+
 # definerer funksjonen for å chatte med GPT
 def chat_with_gpt(prompt):
     # legger til brukerens melding i samtalehistorikken|
