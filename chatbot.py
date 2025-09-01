@@ -25,12 +25,13 @@ tools = [
        }
    }
 ]
+# 
 def get_date():
    return {"date": str(datetime.date.today())}
 
 # definerer funksjonen for å chatte med GPT
 def chat_with_gpt(prompt):
-    # legger til brukerens melding i samtalehistorikken|
+    # legger til brukerens melding i samtalehistorikken
     conversationHistory.append({"role": "user", "content": prompt})
     # sender forespørselen til OpenAI API
     response = client.chat.completions.create(
