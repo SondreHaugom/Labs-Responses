@@ -26,7 +26,7 @@ tools = [
    }
 ]
 def get_date():
-   return {"date": str(datetime.date.today() - datetime.timedelta(days=2))}
+   return {"date": str(datetime.date.today())}
 
 # definerer funksjonen for å chatte med GPT
 def chat_with_gpt(prompt):
@@ -46,26 +46,28 @@ def chat_with_gpt(prompt):
 
     # sjekker om det er noen verktøyanrop
     if message.tool_calls:
-       for tool_call in message.tool_calls:
-          if tool_call.function.name == "get_date" .lower():
-             result = get_date()
-
-    # legger til verktøyets svar i samtalehistorikken
-    second_response = client.chat.completions.create(
-       model="gpt-4o", 
-       messages=conversationHistory + [
-          message, 
-          {"role": "tool", "tool_call_id": tool_call.id, "content": str(result)},
-       ]
-    )
-    print (second_response)
-    # henter svaret fra verktøyet 
-    final_answer = second_response.choices[0].message.content.strip()
-    conversationHistory.append({"role": "assistant", "content": final_answer})
-    return final_answer 
-    answer = message.content.strip() 
-    conversationHistory.append({"role": "assistant", "content": answer})
-    return answer
+        for tool_call in message.tool_calls:
+            if tool_call.function.name == "get_date":
+                result = get_date()
+                
+                # legger til verktøyets svar i samtalehistorikken
+                second_response = client.chat.completions.create(
+                    model="gpt-4o", 
+                    messages=conversationHistory + [
+                        message, 
+                        {"role": "tool", "tool_call_id": tool_call.id, "content": str(result)},
+                    ]
+                )
+                print(second_response)
+                # henter svaret fra verktøyet 
+                final_answer = second_response.choices[0].message.content.strip()
+                conversationHistory.append({"role": "assistant", "content": final_answer})
+                return final_answer
+    else:
+        # Hvis ingen tool_calls, returner det vanlige svaret
+        answer = message.content.strip() 
+        conversationHistory.append({"role": "assistant", "content": answer})
+        return answer
 
 # en if setning med en while løkke som kjører samtale loopen
 if __name__ == "__main__":
