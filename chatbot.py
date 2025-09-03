@@ -36,7 +36,7 @@ tools = [
 def get_date():
    return {"date": str(datetime.date.today())}
 
-
+# definerer verktøyene for å hente vitser fra chucknorris api
 tools = [
     {
         "type": "function",
@@ -47,9 +47,10 @@ tools = [
     }
 ]
 
+# definerer funksjonen for å hente vitser fra chucknorris api
 def get_joke():
-    category = requests.get("https://api.chucknorris.io/jokes/random")
-    return {category}
+    response = requests.get("https://api.chucknorris.io/jokes/random")
+    return {"joke": response.json().get("value")}
 
 # definerer funksjonen for å chatte med GPT
 def chat_with_gpt(prompt):
@@ -118,4 +119,3 @@ if __name__ == "__main__":
             break
         response = chat_with_gpt(user_input)  
         print("Chatbot:", response)
-        
