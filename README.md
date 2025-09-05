@@ -23,3 +23,4 @@ Nedlasting av programmet
 For å laste ned og teste ut dette programmet, kjør følgende kommando:
 
 git clone https://github.com/SondreHaugom/Labs-Responses
+
