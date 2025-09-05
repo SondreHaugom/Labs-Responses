@@ -19,9 +19,6 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 # definerer en funksjon som henter dagens dato med datetime biblioteket
 
 
-
-
-
 # definerer verktøyene som kan brukes
 tools = [
    {
