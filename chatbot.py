@@ -30,14 +30,7 @@ tools = [
            "name": "get_date",
            "description": "Returnerer dagens dato"
        }
-   }
-]
-# definerer funksjonen for å hente dagens dato
-def get_date():
-   return {"date": str(datetime.date.today())}
-
-# definerer verktøyene for å hente vitser fra chucknorris api
-tools = [
+   }, 
     {
         "type": "function",
         "function": {
@@ -45,7 +38,12 @@ tools = [
             "description": "Returnerer en vits"
         }
     }
+   
 ]
+# definerer funksjonen for å hente dagens dato
+def get_date():
+   return {"date": str(datetime.date.today())}
+
 
 # definerer funksjonen for å hente vitser fra chucknorris api
 def get_joke():
