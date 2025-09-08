@@ -59,6 +59,8 @@ def get_fact():
     response = requests.get("https://uselessfacts.jsph.pl/api/v2/facts/random?language=en")
     return {"fact": response.json().get("text")}
 
+
+
 # definerer funksjonen for å chatte med GPT
 def chat_with_gpt(prompt):
     # legger til brukerens melding i samtalehistorikken
