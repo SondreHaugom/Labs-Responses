@@ -54,7 +54,7 @@ def get_joke():
     response = requests.get("https://api.chucknorris.io/jokes/random")
     return {"joke": response.json().get("value")}
 
-
+# definerer funksjonen for å hente en fun fact med uselessfacts api
 def get_fact():
     response = requests.get("https://uselessfacts.jsph.pl/api/v2/facts/random?language=en")
     return {"fact": response.json().get("text")}
@@ -80,7 +80,7 @@ def chat_with_gpt(prompt):
         for tool_call in message.tool_calls:
             # Sjekker hvilken funksjon som blir kalt
             function_name = tool_call.function.name
-            
+            # Kaller den tilsvarende funksjonen
             if function_name == "get_date":
                 result = get_date()
                 
@@ -92,12 +92,15 @@ def chat_with_gpt(prompt):
                         {"role": "tool", "tool_call_id": tool_call.id, "content": str(result)},
                     ]
                 )
+                # priter ut svaret fra gpt etter verktøyet er kalt
                 print(second_response)
                 # henter svaret fra verktøyet 
                 final_answer = second_response.choices[0].message.content.strip()
+                # Legger til svaret i samtalehistorikken
                 conversationHistory.append({"role": "assistant", "content": final_answer})
+                # returnerer 
                 return final_answer
-            
+            # sjekker om funksjonen som blir kalt er get_joke
             elif function_name.lower() == "get_joke":
                 result = get_joke()
                 # legger til verktøyets svar i samtalehistorikken
@@ -108,15 +111,16 @@ def chat_with_gpt(prompt):
                         {"role": "tool", "tool_call_id": tool_call.id, "content": str(result)},
                     ]
                 )
+                # priter ut svaret fra gpt etter verktøyet er kalt
                 print(third_response)
                 # henter svaret fra verktøyet
                 final_answer = third_response.choices[0].message.content.strip()
                 conversationHistory.append({"role": "assistant", "content": final_answer})
                 return final_answer
-            
+            # sjekker om funksjonen som blir kalt er Get_fact
             elif function_name == "Get_fact": 
                 result = get_fact()
-
+                
                 fourth_response = client.chat.completions.create(
                     model= "gpt-4.1", 
                     messages=conversationHistory + [
@@ -124,6 +128,7 @@ def chat_with_gpt(prompt):
                         {"role": "tool", "tool_call_id": tool_call.id, "content": str(result)}, 
                     ]
                 )
+                # priter ut svaret fra gpt etter verktøyet er kalt
                 print(fourth_response)
                 final_answer = fourth_response.choices[0].message.content.strip()
                 conversationHistory.append({"role": "assistant", "content": final_answer})
