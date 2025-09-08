@@ -1,26 +1,33 @@
 Velkommen til Labs-Responses!
 
-Dette prosjektet er laget mest for utforskning og testing av Function Calling og respons-API-et til OpenAI. Prosjektet er satt opp slik at du kan snakke med chatbotten som en vanlig chatbot, men ved et visst ord vil den kalle på en funksjon som kun kjører når den blir aktivert. Function Calling er en veldig fleksibel og kraftig måte for OpenAI-modeller å samhandle med eksterne systemer på, samt få tilgang til data utenfor treningsdataene deres.
+Dette prosjektet er en enkel chatbot som benytter seg av OpenAI sitt API.
+Med dette prosjektet har jeg hatt stort fokus på function calling, og satt opp tre ulike funksjonskall:
 
-Funksjonalitet i dette prosjektet:
+Mine funksjonskall
 
-Bruke chatbotten som en vanlig chatbot
+  1. Datetime-biblioteket i Python
 
-Kalle på en funksjon dersom aktiveringsordet brukes
+  2. Chuck Norris API
 
-Samtalehistorikk
+  3. Useless Facts API
+
+Alle disse er eksterne kilder som ikke finnes i OpenAI sin treningsdata.
+For at språkmodellen skal kunne bruke denne dataen, benytter jeg function calling.
+Med function calling kan språkmodellen hente ut informasjon direkte fra kilden i sanntid.
 
 Personvern
 
-All samtale du har med chatbotten blir lagret i en conversationHistory-array så lenge programmet kjører. Dersom du starter en ny samtale eller restarter programmet, vil ingen meldinger eller informasjon bli lagret videre. Dette betyr at informasjonen du sender inn ikke blir tatt vare på etter endt økt. Chatbotten vil kunne huske samtalen underveis, men ikke i etterkant.
+Dette prosjektet samler ikke inn noen form for informasjon om brukeren.
+Programmet trenger derfor ingen ekstra personvernstiltak for å kunne brukes.
 
-Når Function Calling brukes i dette programmet, hentes kun dagens dato ut via datetime-biblioteket i Python. Ingen data fra brukeren sendes eller lagres i dette endepunktet.
+⚠️ Husk: Siden dette er en chatbot som bruker OpenAI sin språkmodell, må du aldri sende inn sensitiv informasjon om deg selv eller andre når du tester programmet.
 
-Med andre ord: ingen data eller informasjon fra brukeren er nødvendig eller blir lagret for å kjøre dette programmet.
+Nedlasting
 
-Nedlasting av programmet
+Ønsker du å teste programmet selv eller lage din egen versjon?
+Da kan du klone repoet slik:
 
-For å laste ned og teste ut dette programmet, kjør følgende kommando:
+git clone https://github.com/SondreHaugom/Labs-Responses.git
 
-git clone https://github.com/SondreHaugom/Labs-Responses
 
+Dette repoet er laget som en enkel chatbot for testing og utforskning av responser med OpenAI sitt API
