@@ -87,7 +87,7 @@ def chat_with_gpt(prompt):
             # Sjekker hvilken funksjon som blir kalt
             function_name = tool_call.function.name
             # Kaller den tilsvarende funksjonen
-            if function_name == "get_date":
+            if function_name.lower() == "get_date":
                 result = get_date()
                 
                 # legger til verktøyets svar i samtalehistorikken
@@ -124,7 +124,7 @@ def chat_with_gpt(prompt):
                 conversationHistory.append({"role": "assistant", "content": final_answer})
                 return final_answer
             # sjekker om funksjonen som blir kalt er Get_fact
-            elif function_name == "Get_fact": 
+            elif function_name.lower() == "Get_fact": 
                 result = get_fact()
                 
                 fourth_response = client.chat.completions.create(
