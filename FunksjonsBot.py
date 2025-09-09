@@ -22,6 +22,7 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 
 # definerer verktøyene som kan brukes
 tools = [
+    # verktøy for å hente dagens dato
    {
        "type": "function",
        "function": {
@@ -29,6 +30,7 @@ tools = [
            "description": "Returnerer dagens dato"
        }
    }, 
+   # verktøy for å hente vitser
     {
         "type": "function",
         "function": {
@@ -36,10 +38,11 @@ tools = [
             "description": "Returnerer en vits"
         }
     }, 
+    # verktøy for å hente en fun fact
     {
         "type": "function",
         "function": {
-            "name": "Get_fact", 
+            "name": "get_fact", 
             "description": "Returnerer en fun fact"
         }
     }
