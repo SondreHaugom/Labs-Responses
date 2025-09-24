@@ -31,3 +31,4 @@ git clone https://github.com/SondreHaugom/Labs-Responses.git
 
 
 Dette repoet er laget som en enkel chatbot for testing og utforskning av responser med OpenAI sitt API
+
