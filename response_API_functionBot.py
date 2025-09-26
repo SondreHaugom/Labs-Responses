@@ -11,10 +11,11 @@ print(sys.executable)
 load_dotenv()
 # hent API-nøkkelen
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-# oppretter samtale historikk og rolle til chatbotten
-conversationHistory = [
-   {"role": "system", "content": "You are a helpful assistant."},
-]
+
+
+conversation_ID = None
+
+
 # oppretter OpenAI-klienten
 client = OpenAI(api_key=OPENAI_API_KEY)
 # definerer en funksjon som henter dagens dato med datetime biblioteket
@@ -97,103 +98,93 @@ def get_fact():
 
 # definerer en funksjon som håndterer funksjonskall og kommunikasjon med modellen
 def chat_with_gpt(user_input):
-    conversationHistory.append({"role": "user", "content": user_input})
+    
     response = client.responses.create(
         model="gpt-4.1",
-        input=conversationHistory,
-        tools=tools,
+        input=user_input,
     )
-    # returnerer svaret fra modellen
-    text = getattr(response, "output_text", "")
-    if text:
-        conversationHistory.append({"role": "assistant", "content": text})
-        return text
-
-    # Håndterer funksjonskall
-    for item in response.output:
-        if item.type == "function_call":
-            if item.name == "get_date": 
-                date = get_date()
-                conversationHistory.append({
-                    "type": "function_call_output",
-                    "call_id": item.call_id,
-                    "output": json.dumps({
-                        "date": date
-                    })
-                })
-                print("Function calls are invoked")
-                print (conversationHistory)
-
-
-                second_response = client.responses.create(
-                    model="gpt-4.1",
-                    input=conversationHistory + response.output,
-                    tools=tools,
-                )
-
-                text = getattr(second_response, "output_text", "")
-                if text:
-                    conversationHistory.append({"role": "assistant", "content": text})
-                    return text
-            
-            elif item.name == "get_joke": 
-                joke = get_joke()
-                conversationHistory.append({
-                    "type": "function_call_output",
-                    "call_id": item.call_id,
-                    "output": json.dumps({
-                        "joke": joke
-                    })
-                })
-                print("Function calls are invoked")
-                print (conversationHistory)
-
-                third_response = client.responses.create(
-                    model="gpt-4.1",
-                    input=conversationHistory + response.output,
-                    tools=tools,
-                )
-
-                text = getattr(third_response, "output_text", "")
-                if text:
-                    conversationHistory.append({"role": "assistant", "content": text})
-                    return text
-            
-            elif item.name == "get_fact": 
-                fact = get_fact()
-                conversationHistory.append({
-                    "type": "function_call_output",
-                    "call_id": item.call_id,
-                    "output": json.dumps({
-                        "fact": fact
-                    })
-                })
-
-                print("Function calls are invoked")
-                print (conversationHistory)
-
-                fourth_response = client.responses.create(
-                    model="gpt-4.1",
-                    input=conversationHistory + response.output,
-                    tools=tools,
-                )
-
-                text = getattr(fourth_response, "output_text", "")
-                if text:
-                    conversationHistory.append({"role": "assistant", "content": text})
-                    return text
-        else:
-           # Vis ingen funksjonskall, returner det vanlige svaret
-            answer = item.text.strip()
-            conversationHistory.append({"role": "assistant", "content": answer})
-            return answer
+    response_ID = response.id
+    print(response.output_text)
     
-if __name__ == "__main__":
-    while True:
+    while True: 
         user_input = input("You: ")
         if user_input.lower() in ["exit", "quit"]: 
             print("Exiting the chat. Goodbye!")
             break
-        response = chat_with_gpt(user_input)
-        print("chatbot:", response)
-        
+        response = client.responses.create(
+            model="gpt-4.1",
+            input=user_input,
+            previous_response_id=response_ID,
+            tools=tools
+        )
+        response_ID = response.id
+        print("Bot:", response.output_text)
+
+
+
+        for item in response.output:
+            if item.type == "function_call": 
+                if item.name == "get_date": 
+                    date = get_date()
+                    print ("Function calls are invoked")
+                    print ("Bot:", date)
+
+
+                    function_call_outputs = {
+                        "type": "function_call_output", 
+                        "call_id": item.call_id,
+                        "output": json.dumps(date)
+                    }
+
+                    second_response = client.responses.create(
+                        model = "gpt-4.1", 
+                        input = [function_call_outputs], 
+                        previous_response_id = response_ID
+                        
+                    )
+                    print("Bot:", second_response.output_text)
+                    response_ID = second_response.id  # Oppdater response_ID
+
+                elif item.name == "get_joke": 
+                    joke = get_joke()
+                    print ("Function calls are invoked")
+                    print ("Bot:", joke)
+
+                    function_call_outputs = {
+                        "type": "function_call_output", 
+                        "call_id": item.call_id, 
+                        "output": json.dumps(joke)
+                    }
+
+                    third_response = client.responses.create(
+                        model="gpt-4.1", 
+                        input=[function_call_outputs], 
+                        previous_response_id=response_ID
+                    )
+
+                    print("Bot:", third_response.output_text)
+                    response_ID = third_response.id  # Oppdater response_ID
+                
+                elif item.name == "get_fact": 
+                    fact = get_fact()
+                    print ("Function calls are invoked")
+                    print ("Bot:", fact)
+
+                    function_call_outputs = {
+                        "type": "function_call_output", 
+                        "call_id": item.call_id, 
+                        "output": json.dumps(fact)
+                    }
+
+                    fourth_response = client.responses.create(
+                        model="gpt-4.1", 
+                        input=[function_call_outputs], 
+                        previous_response_id=response_ID
+                    )
+
+                    print("Bot:", fourth_response.output_text)
+                    response_ID = fourth_response.id  # Oppdater response_ID
+
+
+# Start samtalen
+chat_with_gpt("Hei")
