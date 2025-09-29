@@ -1,7 +1,7 @@
 # Function Calling med OpenAI  
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
-![Status](https://img.shields.io/badge/status-under_development-yellow)
+![Status](https://img.shields.io/badge/status-ferdig-green)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 Dette prosjektet er en chatbot som hovedsakelig fokuserer på **function calling**.  
