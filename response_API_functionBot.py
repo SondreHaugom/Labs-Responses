@@ -97,94 +97,78 @@ def get_fact():
 
 
 # definerer en funksjon som håndterer funksjonskall og kommunikasjon med modellen
-def chat_with_gpt(user_input):
-    
+def chat_with_gpt(start_message):
+    input_list = []  # definerer en tom liste for å legge funksjonskall resultater
+
+    # definerer en response med startmeldingen og verktøyene
     response = client.responses.create(
         model="gpt-4.1",
-        input=user_input,
+        input=start_message,
+        tools=tools
     )
+    # lagrer response ID for å kunne referere til denne i senere kall
     response_ID = response.id
     print(response.output_text)
     
+    # starter en løkke for å håndtere påfølgende brukerinput og funksjonskall
     while True: 
         user_input = input("You: ")
         if user_input.lower() in ["exit", "quit"]: 
             print("Exiting the chat. Goodbye!")
             break
-        response = client.responses.create(
-            model="gpt-4.1",
-            input=user_input,
+
+        # sender brukerinput til modellen sammen med tidligere response ID og verktøyene
+        response  = client.responses.create(
+            model="gpt-4.1", 
+            input = user_input,
             previous_response_id=response_ID,
             tools=tools
         )
+        # lagrer response ID for å kunne referere til denne i senere kall
         response_ID = response.id
-        print("Bot:", response.output_text)
+        print("Chatbot:", response.output_text)
 
+        # håndterer eventuelle funksjonskall i responsen
+        while any(item.type == "function_call" for item in response.output):
+            # lager en tom liste for å legge til funksjonskall resultater
+            input_list = []
 
+            # itererer gjennom alle elementene i responsen
+            for item in response.output:
+                # sjekker om elementet er et funksjonskall
+                if item.type == "function_call": 
+                    print(f"--> kaller funksjon: {item.name}")
 
-        for item in response.output:
-            if item.type == "function_call": 
-                if item.name == "get_date": 
-                    date = get_date()
-                    print ("Function calls are invoked")
-                    print ("Bot:", date)
-
-
-                    function_call_outputs = {
-                        "type": "function_call_output", 
-                        "call_id": item.call_id,
-                        "output": json.dumps(date)
-                    }
-
-                    second_response = client.responses.create(
-                        model = "gpt-4.1", 
-                        input = [function_call_outputs], 
-                        previous_response_id = response_ID
-                        
-                    )
-                    print("Bot:", second_response.output_text)
-                    response_ID = second_response.id  # Oppdater response_ID
-
-                elif item.name == "get_joke": 
-                    joke = get_joke()
-                    print ("Function calls are invoked")
-                    print ("Bot:", joke)
-
-                    function_call_outputs = {
-                        "type": "function_call_output", 
-                        "call_id": item.call_id, 
-                        "output": json.dumps(joke)
-                    }
-
-                    third_response = client.responses.create(
-                        model="gpt-4.1", 
-                        input=[function_call_outputs], 
-                        previous_response_id=response_ID
-                    )
-
-                    print("Bot:", third_response.output_text)
-                    response_ID = third_response.id  # Oppdater response_ID
+                    # utfører riktig funksjon basert på funksjonskall navnet
+                    if item.name == "get_date": 
+                        result = get_date()
                 
-                elif item.name == "get_fact": 
-                    fact = get_fact()
-                    print ("Function calls are invoked")
-                    print ("Bot:", fact)
+                    elif item.name == "get_joke": 
+                        result = get_joke() 
+                    
+                    elif item.name == "get_fact": 
+                        result = get_fact()
 
-                    function_call_outputs = {
+                    else: 
+                        result = {"error": "Unknown function"}
+
+                    # legger til funksjonskall resultatet i input_list for å sende tilbake til modellen
+                    input_list.append({
                         "type": "function_call_output", 
                         "call_id": item.call_id, 
-                        "output": json.dumps(fact)
-                    }
+                        "output": json.dumps(result)
 
-                    fourth_response = client.responses.create(
+                    })
+                    # sender funksjonskall resultatet tilbake til modellen sammen med tidligere response ID og verktøyene
+                    response = client.responses.create(
                         model="gpt-4.1", 
-                        input=[function_call_outputs], 
-                        previous_response_id=response_ID
+                        input = input_list,
+                        previous_response_id=response_ID,
+                        tools=tools
                     )
-
-                    print("Bot:", fourth_response.output_text)
-                    response_ID = fourth_response.id  # Oppdater response_ID
-
-
+                    # lagrer response ID for å kunne referere til denne i senere kall
+                    response_ID = response.id
+                    print("Chatbot:", response.output_text)
+      
 # Start samtalen
 chat_with_gpt("Hei")
