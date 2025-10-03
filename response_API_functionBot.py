@@ -98,8 +98,6 @@ def get_fact():
 
 # definerer en funksjon som håndterer funksjonskall og kommunikasjon med modellen
 def chat_with_gpt():
-    input_list = []  # definerer en tom liste for å legge funksjonskall resultater
-
     # definerer en variabel for å lagre response ID
     response_ID = None
     # starter en løkke for å håndtere påfølgende brukerinput og funksjonskall
