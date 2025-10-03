@@ -133,14 +133,14 @@ def chat_with_gpt(start_message):
             # lager en tom liste for å legge til funksjonskall resultater
             input_list = []
 
-            # itererer gjennom alle elementene i responsen
+            # går gjennom alle elementene i responsen
             for item in response.output:
                 # sjekker om elementet er et funksjonskall
                 if item.type == "function_call": 
                     print(f"--> kaller funksjon: {item.name}")
 
                     # utfører riktig funksjon basert på funksjonskall navnet
-                    if item.name == "get_date": 
+                    if item.name == "getdate": 
                         result = get_date()
                 
                     elif item.name == "get_joke": 
