@@ -97,19 +97,9 @@ def get_fact():
 
 
 # definerer en funksjon som håndterer funksjonskall og kommunikasjon med modellen
-def chat_with_gpt(start_message):
+def chat_with_gpt():
     input_list = []  # definerer en tom liste for å legge funksjonskall resultater
-
-    # definerer en response med startmeldingen og verktøyene
-    response = client.responses.create(
-        model="gpt-4.1",
-        input=start_message,
-        tools=tools
-    )
-    # lagrer response ID for å kunne referere til denne i senere kall
-    response_ID = response.id
-    print(response.output_text)
-    
+    response_ID = None
     # starter en løkke for å håndtere påfølgende brukerinput og funksjonskall
     while True: 
         user_input = input("You: ")
@@ -171,4 +161,4 @@ def chat_with_gpt(start_message):
                     print("Chatbot:", response.output_text)
       
 # Start samtalen
-chat_with_gpt("Hei")
+chat_with_gpt()
