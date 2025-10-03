@@ -140,7 +140,7 @@ def chat_with_gpt(start_message):
                     print(f"--> kaller funksjon: {item.name}")
 
                     # utfører riktig funksjon basert på funksjonskall navnet
-                    if item.name == "getdate": 
+                    if item.name == "get_date": 
                         result = get_date()
                 
                     elif item.name == "get_joke": 
