@@ -79,6 +79,10 @@ tools = [
 # definerer funksjonen for å hente dagens dato
 def get_date():
    return {"date": str(datetime.date.today())}
+if datetime.date.today() == "": 
+    print("Error: Date not found")
+    exit()
+
 
 
 
@@ -86,13 +90,17 @@ def get_date():
 def get_joke():
     response = requests.get("https://api.chucknorris.io/jokes/random")
     return {"joke": response.json().get("value")}
-
-
+if requests.get("https://api.chucknorris.io/jokes/random").json().get("value") == "":
+    print("Error: Joke not found")
+    exit()
 
 # definerer funksjonen for å hente en fun fact med uselessfacts api
 def get_fact():
     response = requests.get("https://uselessfacts.jsph.pl/api/v2/facts/random?language=en")
     return {"fact": response.json().get("text")}
+if requests.get("https://uselessfacts.jsph.pl/api/v2/facts/random?language=en").json().get("text") == "":
+    print("Error: Fact not found")
+    exit()
 
 
 
